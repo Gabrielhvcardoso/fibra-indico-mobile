@@ -1,0 +1,30 @@
+import Color from 'color';
+
+export const theme = {
+  w0: Color('#ffffff'),
+  w1: Color('#f5f5f5'),
+  w2: Color('#ebebeb'),
+  w3: Color('#e0e0e0'),
+  w4: Color('#d6d6d6'),
+  w5: Color('#cccccc'),
+  w6: Color('#c2c2c2'),
+  w7: Color('#b8b8b8'),
+  w8: Color('#adadad'),
+  w9: Color('#a3a3a3'),
+  g0: Color('#999999'),
+  g1: Color('#8f8f8f'),
+  g2: Color('#858585'),
+  g3: Color('#7a7a7a'),
+  g4: Color('#707070'),
+  g5: Color('#666666'),
+  b0: Color('#5c5c5c'),
+  b1: Color('#525252'),
+  b2: Color('#474747'),
+  b3: Color('#3d3d3d'),
+  b4: Color('#333333'),
+  b5: Color('#292929'),
+  b6: Color('#1f1f1f'),
+  b7: Color('#141414'),
+  b8: Color('#0a0a0a'),
+  b9: Color('#000000')
+};
