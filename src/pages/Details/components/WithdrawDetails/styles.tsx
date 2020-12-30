@@ -44,7 +44,9 @@ export const Text = styled.Text`
 `;
 
 const TicketContainer = styled.View`
-  background-color: #ffedb3;
+  /* don't care about this above */
+  /* background-color: #ffedb3; */ 
+  background-color: #fff; 
   padding: 20px;
 `;
 
