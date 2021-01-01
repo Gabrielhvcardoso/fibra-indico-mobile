@@ -3,10 +3,12 @@ import { Container, Label } from './styles';
 import TextInput from '../../components/TextField';
 import Picker, { PickerItem } from '../../components/Picker';
 import Button from '../../components/Button';
-import { TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 
 import { StackScreenProps } from '@react-navigation/stack';
 import { NotLoggedStackParamList } from '../../routes';
+import { useFetch } from '../../hooks';
+import { cpfFormatter, phoneFormatter } from '../../utils';
 
 interface StateObject {
   id: number,
@@ -24,6 +26,7 @@ interface CityObject {
 interface RegisterForm {
   name: string,
   email: string,
+  password: string,
   phone: string,
   cpf: string,
   state: string,
@@ -48,7 +51,37 @@ const Register: React.FC<Props> = ({ navigation }) => {
       fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${register.state}/municipios`)
         .then((response) => response.json().then((data) => setCities(data)));
     }
-  }, []);
+  }, [register.state]);
+
+  const onRegister = () => {
+    if (!register.email || !register.password || !register.name || !register.phone || !register.cpf || !register.state || !register.city) {
+      return Alert.alert('Atenção', 'Preencha todos os campos obrigatórios.', [{ text: 'Ok' }]);
+    }
+
+    if (!register.email.includes('@')) {
+      return Alert.alert('Atenção', 'E-mail inválido.', [{ text: 'Ok' }]);
+    }
+
+    if (register.password.length < 8 || register.password.length > 20) {
+      return Alert.alert('Atenção', 'Sua senha deve ter entre 8 e 20 caracteres.', [{ text: 'Ok' }]);
+    }
+
+    useFetch.put('/u', { user: register }, (response) => {
+      if (response.code === 'error') {
+        Alert.alert(
+          'Erro',
+          'Não foi possível criar sua conta, verifique se todos os campos estão corretos.',
+          [{ text: 'Ok' }]
+        );
+      } else {
+        Alert.alert(
+          'Sucesso',
+          'Sua conta foi criada, aguarde pela confirmação da sua conta que será notificada via e-mail ou por ligação.',
+          [{ text: 'Ok' }]
+        );
+      }
+    });
+  };
 
   return (
     <Container>
@@ -66,17 +99,26 @@ const Register: React.FC<Props> = ({ navigation }) => {
         placeholder="E-mail"
       />
 
+      <Label>Senha</Label>
+      <TextInput
+        value={register.password}
+        onChangeText={(value: string) => setRegister({ ...register, password: value })}
+        secureTextEntry
+        placeholder="Senha (8 a 20 caracteres)"
+      />
+
       <Label>Telefone</Label>
       <TextInput
+        keyboardType="number-pad"
         value={register.phone}
-        onChangeText={(value: string) => setRegister({ ...register, phone: value })}
+        onChangeText={(value: string) => setRegister({ ...register, phone: phoneFormatter(value) })}
         placeholder="Telefone"
       />
 
       <Label>CPF</Label>
       <TextInput
         value={register.cpf}
-        onChangeText={(value: string) => setRegister({ ...register, cpf: value })}
+        onChangeText={(value: string) => setRegister({ ...register, cpf: cpfFormatter(value) })}
         placeholder="CPF"
       />
 
@@ -118,6 +160,7 @@ const Register: React.FC<Props> = ({ navigation }) => {
         <Label>Ao cadastrar-se você concorda com os termos de uso.</Label>
       </TouchableOpacity>
       <Button
+        onPress={onRegister}
         style={{ marginTop: 30 }}
       >Registrar-se</Button>
     </Container>

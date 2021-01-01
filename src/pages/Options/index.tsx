@@ -5,7 +5,7 @@ import { theme } from '../../theme';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../../routes';
 
-import Book from 'react-native-bootstrap-icons/icons/book';
+// import Book from 'react-native-bootstrap-icons/icons/book';
 import DoorOpen from 'react-native-bootstrap-icons/icons/door-open';
 import CreditCard from 'react-native-bootstrap-icons/icons/credit-card';
 import Trash from 'react-native-bootstrap-icons/icons/trash';
