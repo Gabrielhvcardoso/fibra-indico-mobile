@@ -29,7 +29,8 @@ const MenuItemText = styled.Text`
 `;
 
 interface Props extends TouchableOpacityProps {
-  icon?: React.FC<ViewProps>
+  icon?: React.FC<ViewProps>,
+  danger?: boolean
 }
 
 export const MenuItem: React.FC <Props> = (props) => (
@@ -39,11 +40,11 @@ export const MenuItem: React.FC <Props> = (props) => (
         <props.icon style={{ marginRight: 20 }} />
       )
     }
-    <MenuItemText>
+    <MenuItemText style={{ color: props.danger ? 'red' : 'black' }}>
       { props.children }
     </MenuItemText>
 
-    <CaretRight width={10} height={10} fill={theme.b9.hex()} />
+    <CaretRight width={10} height={10} fill={props.danger ? 'red' : theme.b9.hex()} />
   </MenuItemContainer>
 );
 
