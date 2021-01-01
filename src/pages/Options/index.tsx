@@ -64,7 +64,7 @@ const Options: React.FC<Props> = ({ navigation }) => {
         <Text>Meus dados</Text>
       </ProfileContainer>
       <MenuItem onPress={() => navigation.navigate('methods')} icon={(props) => <CreditCard {...iconProps} {...props} />}>Métodos de saque</MenuItem>
-      <MenuItem onPress={() => navigation.navigate('terms')} icon={(props) => <Book {...iconProps} {...props} />}>Termos de uso</MenuItem>
+      {/* <MenuItem onPress={() => navigation.navigate('terms')} icon={(props) => <Book {...iconProps} {...props} />}>Termos de uso</MenuItem> */}
       <MenuItem onPress={() => authenticate(null)} icon={(props) => <DoorOpen {...iconProps} {...props} />}>Sair</MenuItem>
       <MenuItem onPress={desativateUser} danger icon={(props) => <Trash {...iconProps} {...props} fill="red" />}>Apagar conta</MenuItem>
     </Container>
