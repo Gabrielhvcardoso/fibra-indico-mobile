@@ -49,7 +49,7 @@ const Indicate: React.FC = () => {
         return Alert.alert('Erro', 'Ocorreu um erro ao tentar indicar.', [{ text: 'Ok' }]);
       }
 
-      Alert.alert('Sucesso', '', [{ text: 'Ok' }]);
+      Alert.alert('Sucesso', 'Indicação enviada.', [{ text: 'Ok' }]);
     });
   };
 

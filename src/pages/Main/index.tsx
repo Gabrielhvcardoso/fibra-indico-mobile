@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, ButtonText, Currency, CurrencyView, Label, Recommendation, Surface } from './styles';
-import { Dimensions, FlatList, View } from 'react-native';
+import { Clipboard, Dimensions, FlatList, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import CashStack from 'react-native-bootstrap-icons/icons/cash-stack';
 import Envelope from 'react-native-bootstrap-icons/icons/envelope';
 import { theme } from '../../theme';
@@ -38,6 +38,16 @@ export type TopTabParamList = {
 }
 
 const TopTab = createMaterialTopTabNavigator<TopTabParamList>();
+
+const onCopyCodeToClipboard = (code: string) => {
+  Clipboard.setString(code);
+
+  ToastAndroid.showWithGravity(
+    'Copiado para área de transferência',
+    ToastAndroid.SHORT,
+    ToastAndroid.CENTER
+  );
+};
 
 const List: React.FC<MaterialTopTabScreenProps<TopTabParamList, 'withdraws' | 'recommendations'>> = ({ route }) => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -101,10 +111,17 @@ const Main: React.FC<Props> = ({ navigation, route }) => {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar translucent style="dark" />
-      <Surface onPress={() => console.log(history)}>
+      <Surface>
         <CurrencyView>
           <Label>Sua conta</Label>
           <Currency>{ current && currencyFormat(current.account, true) }</Currency>
+
+          <TouchableOpacity
+            onPress={() => onCopyCodeToClipboard(current?.token ?? '')}
+            style={{ alignItems: 'center', marginTop: 10 }}>
+            <Text style={{ fontSize: 20, fontFamily: 'WorkSans Medium', textTransform: 'uppercase' }}>{ current && current.token }</Text>
+            <Text style={{ fontSize: 11, fontFamily: 'WorkSans', textTransform: 'uppercase' }}>Seu Código</Text>
+          </TouchableOpacity>
         </CurrencyView>
       </Surface>
 

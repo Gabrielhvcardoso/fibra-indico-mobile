@@ -4,10 +4,13 @@ export const useFetch = {
   get: (url = '/', onEnd = (data: any) => {}) => {
     fetch(BASE_URL + url, {
       method: 'GET'
-    }).then((response) => {
+    }).then(async (response) => {
       response.json()
         .then((data) => {
           onEnd(data);
+        })
+        .catch(() => {
+          onEnd({ code: 'error' });
         });
     });
   },

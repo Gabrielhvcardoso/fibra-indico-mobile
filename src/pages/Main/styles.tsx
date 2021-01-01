@@ -13,14 +13,14 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../routes';
 
 export const Surface = styled.View`
-  padding: ${StatusBar.currentHeight}px 15px 15px 15px;
+  padding: ${StatusBar.currentHeight}px 15px 0px 15px;
   background-color: ${theme.w2.hex()};
   border-radius: 15px;
 `;
 
 export const CurrencyView = styled.View`
   align-items: center;
-  height: 150px;
+  height: 180px;
   justify-content: center;
 `;
 
@@ -97,6 +97,18 @@ interface RecommendationProps {
   item: RecommendationProduct | Withdraw
 }
 
+const resolveStatus = (status: string) => {
+  switch (status) {
+    case 'failed': return 'Falha';
+    case 'recused': return 'Recusado';
+    case 'cancelled': return 'Cancelado';
+    case 'no-response': return 'Sem resposta';
+    case 'pending': return 'Pendente';
+    case 'done': return 'Instalado';
+    default: return 'Indefinido';
+  }
+};
+
 export const Recommendation: React.FC<RecommendationProps> = ({ item }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Página Inicial'>>();
 
@@ -119,13 +131,16 @@ export const Recommendation: React.FC<RecommendationProps> = ({ item }) => {
               )
         }
       </View>
-      <View>
+      <View style={{ alignItems: 'flex-end' }}>
         <ListItemSubTitle>
           {
             isWithdraw(item)
-              ? item.status
+              ? resolveStatus(item.status)
               : formatDistanceToNow(parseInt(item.createdAt), { locale: ptBR })
           }
+        </ListItemSubTitle>
+        <ListItemSubTitle>
+          { !isWithdraw(item) && resolveStatus(item.status) }
         </ListItemSubTitle>
       </View>
     </ListItem>
