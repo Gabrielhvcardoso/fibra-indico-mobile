@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useEffect, useState } from 'react';
+import { useFetch } from '../hooks';
 import { User } from '../types/User';
 
-type PossibleUser = User | null;
+type PossibleUser = User & { password: string } | null;
 
 interface AuthContextProps {
   current: PossibleUser,
@@ -14,15 +15,6 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 export const AuthContextProvider: React.FC = ({ children }) => {
   const [current, setCurrent] = useState<PossibleUser>(null);
 
-  useEffect(() => {
-    const findUser = async () => {
-      const user = await AsyncStorage.getItem('user');
-      if (user) setCurrent(JSON.parse(user));
-    };
-
-    findUser();
-  }, []);
-
   const authenticate = async (user: PossibleUser) => {
     if (user) {
       await AsyncStorage.setItem('user', JSON.stringify(user));
@@ -32,6 +24,23 @@ export const AuthContextProvider: React.FC = ({ children }) => {
       setCurrent(null);
     }
   };
+
+  useEffect(() => {
+    const findUser = async () => {
+      const user = await AsyncStorage.getItem('user');
+      if (user) {
+        useFetch.get(`/u/${JSON.parse(user).token}`, (response) => {
+          if (response.code === 'success') {
+            authenticate(response.user);
+          } else {
+            authenticate(null);
+          }
+        });
+      }
+    };
+
+    findUser();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ current, authenticate }}>
