@@ -40,7 +40,7 @@ export const Badge: React.FC<BadgeProps> = ({ color, icon, children }) => (
 );
 
 export const Text = styled.Text`
-  font-family: 'WorkSans'
+  font-family: 'WorkSans';
 `;
 
 const TicketContainer = styled.View`
@@ -69,6 +69,18 @@ const EdgeDetail = styled.View<{ position: 'a' | 'b' | 'c' | 'd'}>`
 
 const Break = () => <Text></Text>;
 
+const resolveStatus = (status: string) => {
+  switch (status) {
+    case 'failed': return 'Falha';
+    case 'recused': return 'Recusado';
+    case 'cancelled': return 'Cancelado';
+    case 'no-response': return 'Sem resposta';
+    case 'pending': return 'Pendente';
+    case 'done': return 'Finalizado';
+    default: return 'Indefinido';
+  }
+};
+
 export const Ticket: React.FC<{ item: Withdraw }> = ({ item }) => {
   const { current } = useContext(AuthContext);
 
@@ -78,7 +90,7 @@ export const Ticket: React.FC<{ item: Withdraw }> = ({ item }) => {
         <Text>PEDIDO DE SAQUE</Text>
         <Break />
         <Text>Saque de { currencyFormat(item.amount, true) }</Text>
-        <Text>Status: { item.status }</Text>
+        <Text>Status: { resolveStatus(item.status) }</Text>
       </TicketContainer>
       <TicketContainer>
         <EdgeDetail position="a" />

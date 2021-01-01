@@ -97,14 +97,14 @@ interface RecommendationProps {
   item: RecommendationProduct | Withdraw
 }
 
-const resolveStatus = (status: string) => {
+const resolveStatus = (status: string, withdraw = false) => {
   switch (status) {
     case 'failed': return 'Falha';
     case 'recused': return 'Recusado';
     case 'cancelled': return 'Cancelado';
     case 'no-response': return 'Sem resposta';
     case 'pending': return 'Pendente';
-    case 'done': return 'Instalado';
+    case 'done': return withdraw ? 'Finalizado' : 'Instalado';
     default: return 'Indefinido';
   }
 };
@@ -135,7 +135,7 @@ export const Recommendation: React.FC<RecommendationProps> = ({ item }) => {
         <ListItemSubTitle>
           {
             isWithdraw(item)
-              ? resolveStatus(item.status)
+              ? resolveStatus(item.status, true)
               : formatDistanceToNow(parseInt(item.createdAt), { locale: ptBR })
           }
         </ListItemSubTitle>
