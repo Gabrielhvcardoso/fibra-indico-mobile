@@ -83,12 +83,16 @@ const List: React.FC<MaterialTopTabScreenProps<TopTabParamList, 'withdraws' | 'r
 };
 
 const Main: React.FC<Props> = ({ navigation, route }) => {
-  const { current } = useContext(AuthContext);
+  const { current, refreshUserData } = useContext(AuthContext);
   const [history, setHistory] = useState<HistoryItem>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const findHistory = (endding = (response?: HistoryItem) => {}) => {
+  const findHistory = async (endding = (response?: HistoryItem) => {}) => {
+    // updates recommendations/withdraws order from main screen and forces the user acccount update
+
     if (current) {
+      await refreshUserData();
+
       const { secret, token } = current;
       type Response = { code: 'error' } | { code: 'success', history: HistoryItem };
 

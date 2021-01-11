@@ -7,7 +7,8 @@ type PossibleUser = User & { password: string } | null;
 
 interface AuthContextProps {
   current: PossibleUser,
-  authenticate: (user: PossibleUser) => Promise<void>
+  authenticate: (user: PossibleUser) => Promise<void>,
+  refreshUserData: () => Promise<void>
 };
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -25,25 +26,25 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    const findUser = async () => {
-      const user = await AsyncStorage.getItem('user');
-      if (user) {
-        useFetch.get(`/u/${JSON.parse(user).token}`, (response) => {
-          if (response.code === 'success') {
-            authenticate(response.user);
-          } else {
-            authenticate(null);
-          }
-        });
-      }
-    };
+  const refreshUserData = async () => {
+    const user = await AsyncStorage.getItem('user');
+    if (user) {
+      useFetch.get(`/u/${JSON.parse(user).token}`, (response) => {
+        if (response.code === 'success') {
+          authenticate(response.user);
+        } else {
+          authenticate(null);
+        }
+      });
+    }
+  };
 
-    findUser();
+  useEffect(() => {
+    refreshUserData();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ current, authenticate }}>
+    <AuthContext.Provider value={{ current, authenticate, refreshUserData }}>
       { children }
     </AuthContext.Provider>
   );
