@@ -70,7 +70,7 @@ const Register: React.FC<Props> = ({ navigation }) => {
       if (response.code === 'error') {
         Alert.alert(
           'Erro',
-          'Não foi possível criar sua conta, verifique se todos os campos estão corretos.',
+          response.message ? 'O código de indicação é inválido' : 'Não foi possível criar sua conta, verifique se todos os campos estão corretos e certifique-se se seu CPF já não está cadastrado no sistema.',
           [{ text: 'Ok' }]
         );
       } else {
