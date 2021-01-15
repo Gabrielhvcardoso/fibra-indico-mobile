@@ -104,6 +104,7 @@ const resolveStatus = (status: string, withdraw = false) => {
     case 'cancelled': return 'Cancelado';
     case 'no-response': return 'Sem resposta';
     case 'pending': return 'Pendente';
+    case 'pendent': return 'Pendente';
     case 'done': return withdraw ? 'Finalizado' : 'Instalado';
     default: return 'Indefinido';
   }
@@ -136,7 +137,7 @@ export const Recommendation: React.FC<RecommendationProps> = ({ item }) => {
           {
             isWithdraw(item)
               ? resolveStatus(item.status, true)
-              : formatDistanceToNow(parseInt(item.createdAt), { locale: ptBR })
+              : format(parseInt(item.createdAt), "dd/MM/yyyy 'às' kk:mm", { locale: ptBR })
           }
         </ListItemSubTitle>
         <ListItemSubTitle>

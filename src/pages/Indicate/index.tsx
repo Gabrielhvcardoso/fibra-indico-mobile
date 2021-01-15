@@ -1,10 +1,13 @@
 import React, { createRef, useContext, useState } from 'react';
-import { Alert, TextInput as TextInputType } from 'react-native';
+import { ActivityIndicator, Alert, TextInput as TextInputType, View } from 'react-native';
 import { Container, Label } from './styles';
 import Picker, { PickerItem } from '../../components/Picker';
 import TextInput from '../../components/TextField';
 import Button from '../../components/Button';
 import { theme } from '../../theme';
+
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from '../../routes';
 
 import AuthContext from '../../context/auth';
 import DataContext from '../../context/data';
@@ -19,10 +22,13 @@ interface FormProps {
   phone2: string
 }
 
-const Indicate: React.FC = () => {
+type RouterProps = StackScreenProps<RootStackParamList, 'indicate'>
+
+const Indicate: React.FC<RouterProps> = ({ navigation }) => {
   const { current } = useContext(AuthContext);
   const { products } = useContext(DataContext);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [form, setForm] = useState<FormProps>({} as FormProps);
   const inputs = {
     input1: createRef<TextInputType>(),
@@ -35,6 +41,8 @@ const Indicate: React.FC = () => {
       return Alert.alert('Atenção', 'Complete todos os campos', [{ text: 'Ok' }]);
     }
 
+    setIsLoading(true);
+
     useFetch.post('/u/i', {
       recommendation: {
         fromUserToken: current?.token,
@@ -44,16 +52,23 @@ const Indicate: React.FC = () => {
         phone2: form.phone2
       }
     }, (response) => {
-      console.log(new Date().getTime());
+      setIsLoading(false);
       if (response.code === 'error') {
         return Alert.alert('Erro', 'Ocorreu um erro ao tentar indicar.', [{ text: 'Ok' }]);
       }
 
+      navigation.goBack();
       Alert.alert('Sucesso', 'Indicação enviada.', [{ text: 'Ok' }]);
     });
   };
 
-  console.log(current);
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   return (
     <Container>
