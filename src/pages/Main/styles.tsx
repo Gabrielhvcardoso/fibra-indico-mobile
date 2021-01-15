@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { StatusBar, TouchableOpacityProps } from 'react-native';
-import { format, formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 import { theme } from '../../theme';
 
 import { RecommendationProduct } from './index';
