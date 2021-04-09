@@ -2,7 +2,7 @@
   "expo": {
     "name": "Fibra Indico",
     "slug": "fibra-indico",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "platforms": [
       "android"
@@ -20,8 +20,10 @@
       "**/*"
     ],
     "android": {
+      "permissions": [ ],
       "icon": "./assets/icon.png",
-      "package": "com.dinamicami.fibraindico"
+      "package": "com.dinamicami.fibraindico",
+      "versionCode": 2
     }
   }
 }
